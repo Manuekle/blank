@@ -1,6 +1,17 @@
 import { build } from "esbuild";
+import { createRequire } from "node:module";
 
 export const runtime = "nodejs";
+
+// Resolve React entry points at module load, when the server's node_modules is available.
+// Esbuild's default resolution relies on process.cwd(), which is unreliable in production deploys.
+const require = createRequire(import.meta.url);
+const reactAliases: Record<string, string> = {
+  react: require.resolve("react"),
+  "react-dom/client": require.resolve("react-dom/client"),
+  "react/jsx-runtime": require.resolve("react/jsx-runtime"),
+  "react/jsx-dev-runtime": require.resolve("react/jsx-dev-runtime"),
+};
 
 // Compile only. User code executes in an opaque-origin sandbox, never on the server.
 export async function POST(request: Request) {
@@ -42,12 +53,14 @@ window.renderPreview(window.previewState || 'default', window.previewProps);`,
       },
       bundle: true, write: false, platform: "browser", format: "iife", jsx: "automatic",
       minify: true, define: { "process.env.NODE_ENV": '"production"' }, logLevel: "silent",
+      alias: reactAliases,
       plugins: [{ name: "component-files", setup(builder) {
         builder.onResolve({ filter: /^blank-component$/ }, () => ({ path: "Button.tsx", namespace: "component" }));
         builder.onLoad({ filter: /.*/, namespace: "component" }, () => ({ contents: tsx, loader: "tsx", resolveDir: process.cwd() }));
         builder.onResolve({ filter: /.*/, namespace: "component" }, args => {
           if (args.path === "./styles.css") return { path: "styles.css", namespace: "empty-css" };
-          if (["react", "react/jsx-runtime", "react/jsx-dev-runtime"].includes(args.path)) return;
+          if (reactAliases[args.path]) return { path: reactAliases[args.path] };
+          if (args.path === "react-dom/client") return { path: reactAliases["react-dom/client"] };
           return { errors: [{ text: `Unsupported import: ${args.path}. Preview supports React and ./styles.css.` }] };
         });
         builder.onLoad({ filter: /.*/, namespace: "empty-css" }, () => ({ contents: "", loader: "js" }));
