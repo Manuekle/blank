@@ -1,17 +1,24 @@
 import { build } from "esbuild";
-import { createRequire } from "node:module";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export const runtime = "nodejs";
 
-// Resolve React entry points at module load, when the server's node_modules is available.
-// Esbuild's default resolution relies on process.cwd(), which is unreliable in production deploys.
-const require = createRequire(import.meta.url);
-const reactAliases: Record<string, string> = {
-  react: require.resolve("react"),
-  "react-dom/client": require.resolve("react-dom/client"),
-  "react/jsx-runtime": require.resolve("react/jsx-runtime"),
-  "react/jsx-dev-runtime": require.resolve("react/jsx-dev-runtime"),
-};
+// Find node_modules at runtime. Do not use require.resolve("react") here: the bundler rewrites
+// literal calls into internal module IDs and rejects dynamic ones. Instead, hand esbuild the
+// node_modules directory (nodePaths) and let esbuild resolve React itself, bundler-free.
+function findNodeModules(start: string): string | undefined {
+  let dir = start;
+  for (;;) {
+    if (fs.existsSync(path.join(dir, "node_modules", "react", "package.json"))) return path.join(dir, "node_modules");
+    const parent = path.dirname(dir);
+    if (parent === dir) return undefined;
+    dir = parent;
+  }
+}
+const nodeModulesDir =
+  findNodeModules(process.cwd()) ?? findNodeModules(path.dirname(fileURLToPath(import.meta.url)));
 
 // Compile only. User code executes in an opaque-origin sandbox, never on the server.
 export async function POST(request: Request) {
@@ -53,14 +60,13 @@ window.renderPreview(window.previewState || 'default', window.previewProps);`,
       },
       bundle: true, write: false, platform: "browser", format: "iife", jsx: "automatic",
       minify: true, define: { "process.env.NODE_ENV": '"production"' }, logLevel: "silent",
-      alias: reactAliases,
+      nodePaths: nodeModulesDir ? [nodeModulesDir] : [],
       plugins: [{ name: "component-files", setup(builder) {
         builder.onResolve({ filter: /^blank-component$/ }, () => ({ path: "Button.tsx", namespace: "component" }));
         builder.onLoad({ filter: /.*/, namespace: "component" }, () => ({ contents: tsx, loader: "tsx", resolveDir: process.cwd() }));
         builder.onResolve({ filter: /.*/, namespace: "component" }, args => {
           if (args.path === "./styles.css") return { path: "styles.css", namespace: "empty-css" };
-          if (reactAliases[args.path]) return { path: reactAliases[args.path] };
-          if (args.path === "react-dom/client") return { path: reactAliases["react-dom/client"] };
+          if (["react", "react/jsx-runtime", "react/jsx-dev-runtime", "react-dom/client"].includes(args.path)) return;
           return { errors: [{ text: `Unsupported import: ${args.path}. Preview supports React and ./styles.css.` }] };
         });
         builder.onLoad({ filter: /.*/, namespace: "empty-css" }, () => ({ contents: "", loader: "js" }));
