@@ -75,6 +75,7 @@ window.renderPreview(window.previewState || 'default', window.previewProps);`,
     return Response.json({ code: result.outputFiles[0].text });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to compile component.";
-    return Response.json({ error: message }, { status: 400 });
+    const reactState = nodeModulesDir && fs.existsSync(path.join(nodeModulesDir, "react", "package.json")) ? nodeModulesDir : "not found";
+    return Response.json({ error: `${message} [node_modules for React: ${reactState}]` }, { status: 400 });
   }
 }
