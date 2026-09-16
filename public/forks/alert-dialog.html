@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alert Dialog — Blank fork</title>
+    <link rel="stylesheet" href="./alert-dialog.css" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        gap: 16px;
+        padding: 32px;
+        box-sizing: border-box;
+        font-family: system-ui, sans-serif;
+      }
+      .fork-controls {
+        display: flex;
+        gap: 8px;
+      }
+      .fork-controls button {
+        appearance: none;
+        padding: 6px 12px;
+        font: 12px system-ui, sans-serif;
+        border: 1px solid #d4d4d8;
+        border-radius: 8px;
+        background: #ffffff;
+        cursor: pointer;
+      }
+      .fork-controls button[aria-pressed="true"] {
+        background: #18181a;
+        color: #ffffff;
+        border-color: #18181a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fork-controls" role="group" aria-label="Preview controls">
+      <button type="button" data-fork-theme="light" aria-pressed="true">Light</button>
+      <button type="button" data-fork-theme="dark" aria-pressed="false">Dark</button>
+      <button type="button" data-fork-state="default" aria-pressed="true">Default</button>
+      <button type="button" data-fork-state="hover" aria-pressed="false">Hover</button>
+      <button type="button" data-fork-state="active" aria-pressed="false">Active</button>
+      <button type="button" data-fork-state="focus" aria-pressed="false">Focus</button>
+      <button type="button" data-fork-state="disabled" aria-pressed="false">Disabled</button>
+    </div>
+
+    <div
+      class="blank-alert-dialog"
+      role="alertdialog"
+      aria-labelledby="blank-alert-dialog-title"
+      aria-describedby="blank-alert-dialog-description"
+    >
+      <div class="blank-alert-dialog__card">
+        <div class="blank-alert-dialog__content">
+          <div class="blank-alert-dialog__icon-wrapper" aria-hidden="true">
+            <svg class="blank-alert-dialog__icon" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 10.5V15" />
+              <circle cx="12" cy="7.5" r="0.75" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+
+          <div class="blank-alert-dialog__text">
+            <h2 id="blank-alert-dialog-title" class="blank-alert-dialog__title">
+              Uh oh! Something went wrong
+            </h2>
+
+            <p id="blank-alert-dialog-description" class="blank-alert-dialog__description">
+              We apologize for the inconvenience you experienced.
+            </p>
+          </div>
+        </div>
+
+        <div class="blank-alert-dialog__actions">
+          <button
+            type="button"
+            class="blank-alert-dialog__action blank-alert-dialog__action--primary"
+          >
+            Retry
+          </button>
+
+          <button
+            type="button"
+            class="blank-alert-dialog__action blank-alert-dialog__action--secondary"
+          >
+            Learn more
+          </button>
+
+          <button
+            type="button"
+            aria-label="Close"
+            class="blank-alert-dialog__close"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 7L17 17" />
+              <path d="M17 7L7 17" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="blank-alert-dialog__footer">
+        <span>
+          This message will automatically close in <strong>12 sec</strong>
+        </span>
+      </div>
+    </div>
+
+    <script>
+      var themeButtons = document.querySelectorAll("[data-fork-theme]");
+      var stateButtons = document.querySelectorAll("[data-fork-state]");
+      var dialog = document.querySelector(".blank-alert-dialog");
+
+      function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach(function (button) {
+          button.setAttribute("aria-pressed", String(button.dataset.forkTheme === theme));
+        });
+      }
+
+      function applyState(state) {
+        if (state === "default") delete dialog.dataset.previewState;
+        else dialog.dataset.previewState = state;
+        dialog.setAttribute("aria-disabled", state === "disabled" ? "true" : "false");
+        dialog.querySelectorAll("button").forEach(function (button) {
+          if (state === "disabled") button.disabled = true;
+          else button.disabled = false;
+        });
+        stateButtons.forEach(function (button) {
+          button.setAttribute("aria-pressed", String(button.dataset.forkState === state));
+        });
+      }
+
+      themeButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          applyTheme(button.dataset.forkTheme);
+        });
+      });
+
+      stateButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          applyState(button.dataset.forkState);
+        });
+      });
+
+      applyTheme("light");
+      applyState("default");
+    </script>
+  </body>
+</html>

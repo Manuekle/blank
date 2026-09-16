@@ -1,0 +1,1643 @@
+/*
+ * Blank landing — editorial dark system.
+ * Near-black ground, hairline borders, big display type, restrained
+ * blue accent. Composition does the work; almost no shadows.
+ */
+
+/* The editor locks body scroll; the landing page re-enables it. */
+body:has(.lb-page) {
+  overflow: auto;
+  background: var(--lb-bg);
+}
+
+/* ---------- tokens & base ---------- */
+
+.lb-page {
+  --lb-bg: #050505;
+  --lb-surface: #0d0d0f;
+  --lb-raised: #101114;
+  --lb-line: rgba(255, 255, 255, 0.07);
+  --lb-line-strong: rgba(255, 255, 255, 0.14);
+  --lb-text: #f5f5f5;
+  --lb-secondary: rgba(255, 255, 255, 0.56);
+  --lb-muted: rgba(255, 255, 255, 0.34);
+  --lb-blue: #2f80ff;
+  --lb-blue-strong: #4c8dff;
+  --lb-blue-soft: rgba(47, 128, 255, 0.13);
+  --lb-primary: rgba(255, 255, 255, 0.96);
+  --lb-nav-h: 56px;
+  --lb-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --lb-radius: 14px;
+  --lb-gutter: clamp(20px, 3.4vw, 48px);
+  --lb-max: 1440px;
+
+  position: relative;
+  min-height: 100dvh;
+  background: var(--lb-bg);
+  color: var(--lb-text);
+  font-family: var(--font-text), -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+.lb-page ::selection {
+  background: var(--lb-blue);
+  color: #ffffff;
+}
+
+.lb-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Form controls are included because the global reset clears their
+   outline; without this the kit demos focus invisibly. */
+.lb-page :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--lb-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.lb-container {
+  width: min(100%, var(--lb-max));
+  margin-inline: auto;
+  padding-inline: var(--lb-gutter);
+}
+
+/*
+ * Hero ground: the blue tile mosaic, darkened and faded out before the
+ * first section so the rest of the page stays the near-black editorial
+ * surface. Sits behind everything, never intercepts pointer events,
+ * never changes layout.
+ */
+.lb-page::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 0;
+  height: clamp(760px, 104vh, 1320px);
+  pointer-events: none;
+  background:
+    /* scrim, darkest where the page continues */
+    linear-gradient(
+      180deg,
+      rgba(4, 6, 14, 0.62) 0%,
+      rgba(4, 6, 14, 0.72) 34%,
+      rgba(5, 5, 5, 0.9) 68%,
+      var(--lb-bg) 100%
+    ),
+    url("/background/hero.png") center top / cover no-repeat;
+  /* Feathered tail, so there is no visible seam where it ends. */
+  mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+}
+
+/* The mosaic is busy; a soft vignette keeps the headline the focus. */
+.lb-page::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 0;
+  height: clamp(760px, 104vh, 1320px);
+  pointer-events: none;
+  background:
+    radial-gradient(58% 46% at 50% 26%, rgba(2, 4, 12, 0.55), transparent 72%),
+    radial-gradient(90% 60% at 50% 0%, rgba(120, 180, 255, 0.16), transparent 70%);
+}
+
+.lb-page > main,
+.lb-page > footer {
+  position: relative;
+  z-index: 1;
+}
+
+.lb-sec {
+  padding-block: clamp(80px, 11vw, 152px) clamp(48px, 6vw, 88px);
+  scroll-margin-block-start: 64px;
+}
+
+/* ---------- typography ---------- */
+
+.lb-h {
+  margin: 0;
+  font-family: var(--font-display), var(--font-text), sans-serif;
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.lb-h--lg {
+  font-size: clamp(36px, 4.6vw, 64px);
+}
+
+.lb-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 22px;
+  color: var(--lb-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.lb-kicker i {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--lb-blue);
+  box-shadow: 0 0 0 4px rgba(47, 128, 255, 0.14);
+}
+
+.lb-sub {
+  margin: 0;
+  color: var(--lb-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 56ch;
+}
+
+/*
+ * Section head: kicker + title on the left, supporting line pinned to
+ * the baseline on the right. Collapses to one column under 860px.
+ */
+.lb-sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 22px clamp(32px, 5vw, 96px);
+  align-items: end;
+  margin-block-end: clamp(36px, 5vw, 64px);
+  padding-block-end: clamp(28px, 4vw, 44px);
+  border-block-end: 1px solid var(--lb-line);
+}
+
+.lb-sec-head .lb-kicker {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.lb-sec-head .lb-h {
+  max-width: 18ch;
+}
+
+.lb-sec-head .lb-sub {
+  padding-block-end: 6px;
+  font-size: 14.5px;
+}
+
+/* ---------- nav ---------- */
+
+.lb-skip {
+  position: fixed;
+  top: 12px;
+  left: 20px;
+  z-index: 200;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--lb-raised);
+  color: var(--lb-text);
+  font-size: 13px;
+  transform: translateY(-300%);
+}
+
+.lb-skip:focus {
+  transform: translateY(0);
+}
+
+.lb-nav-sentinel {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.lb-nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.lb-nav-bar {
+  width: 100%;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 240ms var(--lb-ease),
+    border-color 240ms var(--lb-ease);
+}
+
+.lb-nav[data-scrolled] .lb-nav-bar {
+  background: rgba(7, 7, 9, 0.66);
+  border-bottom-color: var(--lb-line);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+/* A lit hairline under the bar, brightest at the centre. */
+.lb-nav-bar::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  height: 1px;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14) 28%,
+    rgba(47, 128, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.14) 72%,
+    transparent
+  );
+  transition: opacity 320ms var(--lb-ease);
+  pointer-events: none;
+}
+
+.lb-nav[data-scrolled] .lb-nav-bar::after {
+  opacity: 1;
+}
+
+.lb-nav-bar {
+  position: relative;
+}
+
+.lb-nav-inner {
+  height: var(--lb-nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(100%, var(--lb-max));
+  margin-inline: auto;
+  padding-inline: var(--lb-gutter);
+}
+
+.lb-nav-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-rounded), var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+
+.lb-nav-word img,
+.lb-nav-word svg {
+  filter: brightness(0) invert(1);
+}
+
+.lb-nav-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.5vw, 32px);
+}
+
+/* Signed-in avatar (Clerk UserButton appearance class). */
+.lb-nav-user {
+  width: 28px;
+  height: 28px;
+}
+
+.lb-nav-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lb-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.lb-nav-link {
+  position: relative;
+  isolation: isolate;
+  padding: 7px 13px;
+  /* Same corner as the Start creating button beside it. */
+  border-radius: 8px;
+  color: var(--lb-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 160ms ease-out;
+}
+
+/* Soft plate that lights up under hover and marks the current page. */
+.lb-nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  opacity: 0;
+  scale: 0.92;
+  transition: opacity 180ms var(--lb-ease), scale 180ms var(--lb-ease);
+}
+
+.lb-nav-link:hover,
+.lb-nav-link[aria-current="page"] {
+  color: var(--lb-text);
+}
+
+.lb-nav-link:hover::before,
+.lb-nav-link[aria-current="page"]::before {
+  opacity: 1;
+  scale: 1;
+}
+
+.lb-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 3px;
+  height: 3px;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: var(--lb-blue-strong);
+}
+
+/* ---------- hero ---------- */
+
+.lb-hero {
+  padding-block: clamp(92px, 10vw, 132px) clamp(48px, 6vw, 80px);
+}
+
+/* Centred poster block: the app still below does the showing. */
+.lb-hero-lead {
+  display: grid;
+  gap: clamp(18px, 2vw, 26px);
+  justify-items: center;
+  text-align: center;
+}
+
+.lb-hero-lead .lb-sub {
+  max-width: 54ch;
+  font-size: 16.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.lb-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 5px 13px 5px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(8, 12, 26, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.lb-hero-eyebrow b {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0b2a6b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.lb-hero-eyebrow i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2f80ff;
+}
+
+/* ---------- hero headline ---------- */
+
+.lb-hero-h1 {
+  margin: 0;
+  font-family: var(--font-display), var(--font-text), sans-serif;
+  font-weight: 600;
+  font-size: clamp(46px, 6.4vw, 104px);
+  line-height: 0.97;
+  letter-spacing: -0.045em;
+}
+
+.lb-hero-h1-line {
+  display: block;
+  color: #ffffff;
+  text-shadow: 0 14px 44px rgba(3, 12, 40, 0.65);
+}
+
+/*
+ * The second line is a selected canvas object: glass plate, gradient
+ * fill, four handles, one label. The product's own vocabulary, not
+ * decoration.
+ */
+.lb-hero-h1-object {
+  position: relative;
+  display: inline-block;
+  /* Bottom margin clears the hanging "Editable" tag. */
+  margin: 0.14em 0 0.46em;
+  padding: 0.08em 0.18em;
+}
+
+.lb-hero-h1-plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 0.2em;
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03) 58%, rgba(255, 255, 255, 0)),
+    rgba(5, 9, 20, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 30px 70px -36px rgba(2, 10, 40, 0.9);
+  backdrop-filter: blur(6px);
+}
+
+/*
+ * Blue metal: light falls from the top over diagonal steel bands that
+ * slide along the line. The bands repeat every 40%, so shifting them by
+ * one period loops without a seam.
+ */
+@property --lb-metal-shift {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.lb-hero-h1-grad {
+  /* Also declared here, so browsers without @property still resolve the
+     gradient instead of dropping it and leaving transparent text. */
+  --lb-metal-shift: 0%;
+
+  position: relative;
+  z-index: 1;
+  display: block;
+  /* The clipped background only paints inside the box, and the tight
+     line height leaves descenders outside it; this extends the box
+     without moving the layout. */
+  padding-block-end: 0.16em;
+  margin-block-end: -0.16em;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 46%, rgba(6, 24, 80, 0.24) 100%),
+    repeating-linear-gradient(
+      100deg,
+      #dce8ff calc(var(--lb-metal-shift) + 0%),
+      #8fb2f6 calc(var(--lb-metal-shift) + 9%),
+      #f7faff calc(var(--lb-metal-shift) + 17%),
+      #5e8eef calc(var(--lb-metal-shift) + 27%),
+      #c3d7fd calc(var(--lb-metal-shift) + 36%),
+      #dce8ff calc(var(--lb-metal-shift) + 40%)
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 10px 30px rgba(3, 14, 48, 0.55));
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .lb-hero-h1-grad {
+    color: #dce8ff;
+  }
+}
+
+/* Selection frame, drawn the way the canvas draws one. */
+.lb-hero-h1-handles i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid var(--lb-blue);
+  border-radius: 2px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 10, 40, 0.55);
+}
+
+.lb-hero-h1-handles i:nth-child(1) { top: -9.5px; left: -9.5px; }
+.lb-hero-h1-handles i:nth-child(2) { top: -9.5px; right: -9.5px; }
+.lb-hero-h1-handles i:nth-child(3) { bottom: -9.5px; left: -9.5px; }
+.lb-hero-h1-handles i:nth-child(4) { bottom: -9.5px; right: -9.5px; }
+
+.lb-hero-h1-handles::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid var(--lb-blue);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.lb-hero-h1-tag {
+  position: absolute;
+  left: 50%;
+  bottom: -13px;
+  translate: -50% 100%;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--lb-blue);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 10px 26px -14px rgba(2, 10, 40, 0.9);
+  color: #ffffff;
+  font-family: var(--font-text), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.lb-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-block-start: 6px;
+}
+
+/* ---------- hero app still ---------- */
+
+/*
+ * The editor on a laptop. wireframe.png is a 1254px square with a
+ * transparent screen. The frame box crops it to the machine, rows 256 to
+ * 981, which leaves out the light shadow baked in under the base for a
+ * white page. Every offset below is in that image's pixels. The still
+ * keeps the editor's 1280x800 viewport and is scaled to the screen's
+ * width, so the chrome keeps its real proportions at any size.
+ */
+.lb-app {
+  position: relative;
+  margin-block-start: clamp(48px, 6vw, 84px);
+}
+
+.lb-app-glow {
+  position: absolute;
+  z-index: 0;
+  inset: 0 8% 12%;
+  pointer-events: none;
+  background: radial-gradient(52% 50% at 50% 42%, rgba(80, 150, 255, 0.42), transparent 72%);
+  filter: blur(60px);
+}
+
+.lb-mac {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 1254 / 726;
+  overflow: clip;
+}
+
+.lb-mac-frame {
+  position: absolute;
+  top: calc(-256 / 726 * 100%);
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The hole is 971x606 at (142, 302); a pixel of bleed on each side
+   tucks the screen's edge under the bezel. */
+.lb-mac-screen {
+  position: absolute;
+  top: calc(45 / 726 * 100%);
+  left: calc(141 / 1254 * 100%);
+  width: calc(973 / 1254 * 100%);
+  height: calc(608 / 726 * 100%);
+  overflow: hidden;
+  container-type: inline-size;
+  /* The editor's own ground, shown until the still paints. */
+  background: #101010;
+}
+
+.lb-mac-screen iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 800px;
+  border: 0;
+  transform-origin: 0 0;
+  /* tan(atan2()) turns the width ratio into the plain number scale()
+     takes; without the calc() wrapper Safari resolves it to 0. */
+  transform: scale(calc(tan(atan2(100cqw, 1280px))));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lb-hero-h1-grad {
+    animation: lb-metal 6s linear infinite;
+  }
+}
+
+/* One band period; linear, so the loop has no visible restart. */
+@keyframes lb-metal {
+  to { --lb-metal-shift: 40%; }
+}
+
+/* Full-width spec rail under the hero — four facts, one hairline grid. */
+.lb-hero-specs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: clamp(40px, 4.5vw, 64px) 0 0;
+  border-block: 1px solid var(--lb-line);
+}
+
+.lb-hero-specs > div {
+  display: grid;
+  gap: 7px;
+  padding: 20px 22px 22px;
+  border-inline-start: 1px solid var(--lb-line);
+  transition: background-color 200ms ease-out;
+}
+
+.lb-hero-specs > div:first-child {
+  border-inline-start: 0;
+  padding-inline-start: 0;
+}
+
+.lb-hero-specs > div:hover {
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.lb-hero-specs dt {
+  color: var(--lb-text);
+  font-family: var(--font-display), var(--font-text), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.lb-hero-specs dd {
+  margin: 0;
+  color: var(--lb-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---------- marquee ---------- */
+
+.lb-marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--lb-line);
+  padding-block: clamp(28px, 4vw, 48px);
+  user-select: none;
+  /* Words dissolve into the page instead of hitting a hard edge. */
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+.lb-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 4vw, 56px);
+  width: max-content;
+  animation: lb-marquee 70s linear infinite;
+}
+
+.lb-marquee:hover .lb-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes lb-marquee {
+  to { transform: translateX(-50%); }
+}
+
+.lb-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(24px, 3.5vw, 48px);
+}
+
+.lb-marquee-word {
+  font-family: var(--font-display), var(--font-text), sans-serif;
+  font-size: clamp(52px, 8.5vw, 128px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.22);
+  white-space: nowrap;
+}
+
+.lb-marquee-item:nth-child(even) .lb-marquee-word {
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.lb-marquee-arrow {
+  flex: none;
+  color: var(--lb-blue);
+}
+
+.lb-marquee-arrow svg {
+  width: clamp(30px, 4.5vw, 72px);
+  height: auto;
+}
+
+/* ---------- catalog ---------- */
+
+/*
+ * The primitive index reads as one bordered sheet: a single outer
+ * frame, hairlines only *between* rows and columns. Borders are drawn
+ * on the leading edges so a short final row never leaves a dangling
+ * rule (the old :nth-last-child rule broke at every breakpoint).
+ */
+.lb-catalog-sheet {
+  overflow: hidden;
+  border: 1px solid var(--lb-line);
+  border-radius: var(--lb-radius);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.005));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 40px 80px -60px rgba(0, 0, 0, 0.9);
+}
+
+.lb-catalog-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lb-catalog-list li {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  padding: 12px 18px;
+  border-block-start: 1px solid var(--lb-line);
+  border-inline-start: 1px solid var(--lb-line);
+  color: var(--lb-secondary);
+  font-size: 14.5px;
+  transition: color 160ms ease-out, background-color 160ms ease-out;
+}
+
+/* No rule above the first row, none left of the first column. */
+.lb-catalog-list li:nth-child(3n + 1) {
+  border-inline-start: 0;
+}
+
+.lb-catalog-list li:nth-child(-n + 3) {
+  border-block-start: 0;
+}
+
+.lb-catalog-list li:hover {
+  color: var(--lb-text);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.lb-catalog-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-catalog-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--lb-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--lb-muted);
+  transition: color 160ms ease-out, border-color 160ms ease-out, background-color 160ms ease-out;
+}
+
+.lb-catalog-list li:hover .lb-catalog-icon {
+  color: var(--lb-blue-strong);
+  border-color: rgba(76, 141, 255, 0.35);
+  background: var(--lb-blue-soft);
+}
+
+.lb-catalog-list li em {
+  margin-inline-start: auto;
+  padding-inline-start: 10px;
+  color: rgba(255, 255, 255, 0.22);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  transition: color 160ms ease-out;
+}
+
+.lb-catalog-list li:hover em {
+  color: var(--lb-muted);
+}
+
+.lb-catalog-total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 0 0 18px;
+  color: var(--lb-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0;
+}
+
+.lb-catalog-total b {
+  color: var(--lb-secondary);
+  font-weight: 500;
+}
+
+/* ==========================================================
+   FINAL CTA
+   ========================================================== */
+
+.lb-final {
+  position: relative;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  padding-top: clamp(96px, 12vw, 168px);
+  padding-bottom: clamp(88px, 11vw, 148px);
+
+  text-align: center;
+
+  overflow: hidden;
+}
+
+
+/* ----------------------------------------------------------
+   Background glow
+   ---------------------------------------------------------- */
+
+/*
+ * Soft blue illumination behind the heading.
+ *
+ * Important:
+ * - it does NOT control layout
+ * - it does NOT affect section height
+ * - it fades before reaching the section boundaries
+ */
+.lb-final-glow {
+  position: absolute;
+  z-index: -1;
+
+  top: 36%;
+  left: 50%;
+
+  width: min(900px, 92vw);
+  aspect-ratio: 1;
+
+  translate: -50% -50%;
+
+  border-radius: 9999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(47, 128, 255, 0.16) 0%,
+      rgba(47, 128, 255, 0.09) 24%,
+      rgba(47, 128, 255, 0.045) 46%,
+      transparent 70%
+    );
+
+  filter: blur(48px);
+
+  pointer-events: none;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000 48%,
+      rgba(0, 0, 0, 0.85) 68%,
+      transparent 94%
+    );
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      #000 48%,
+      rgba(0, 0, 0, 0.85) 68%,
+      transparent 94%
+    );
+
+  animation:
+    lb-final-pulse
+    7s
+    var(--lb-ease)
+    infinite
+    alternate;
+}
+
+
+@keyframes lb-final-pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+
+/* ----------------------------------------------------------
+   Decorative line
+   ---------------------------------------------------------- */
+
+/*
+ * Small hairline above the heading.
+ * The blue highlight only appears around the center.
+ */
+.lb-final-line {
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  translate: -50% 0;
+
+  display: block;
+
+  width: min(520px, 70vw);
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 15%,
+      rgba(255, 255, 255, 0.14) 32%,
+      rgba(47, 128, 255, 0.55) 50%,
+      rgba(255, 255, 255, 0.14) 68%,
+      rgba(255, 255, 255, 0.06) 85%,
+      transparent 100%
+    );
+
+  box-shadow:
+    0 0 8px rgba(47, 128, 255, 0.28),
+    0 0 22px rgba(47, 128, 255, 0.08);
+
+  pointer-events: none;
+}
+
+
+/* ----------------------------------------------------------
+   Heading
+   ---------------------------------------------------------- */
+
+.lb-final h2 {
+  position: relative;
+
+  width: 100%;
+  max-width: 920px;
+
+  margin: 0 auto clamp(36px, 4vw, 48px);
+
+  font-family:
+    var(--font-display),
+    var(--font-text),
+    sans-serif;
+
+  font-size: clamp(
+    3.25rem,
+    6.8vw,
+    6.5rem
+  );
+
+  font-weight: 600;
+
+  line-height: 0.94;
+
+  letter-spacing: -0.05em;
+
+  text-align: center;
+  text-wrap: balance;
+
+  color: var(--lb-primary);
+
+  text-shadow:
+    0 0 80px rgba(47, 128, 255, 0.18);
+}
+
+
+/*
+ * "from blank?" — metallic blue gradient.
+ */
+.lb-final h2 em {
+  font-style: normal;
+
+  background:
+    linear-gradient(
+      180deg,
+      #b7d4ff 0%,
+      #6ba6ff 28%,
+      #2f80ff 55%,
+      #1e63d8 78%,
+      #7fb0ff 100%
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .lb-final h2 em {
+    color: var(--lb-blue-strong);
+  }
+}
+
+
+/* ----------------------------------------------------------
+   CTA buttons
+   ---------------------------------------------------------- */
+
+.lb-final-ctas {
+  position: relative;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+}
+
+
+.lb-final-ctas > a {
+  display: inline-flex;
+
+  text-decoration: none;
+}
+
+
+
+
+/* ----------------------------------------------------------
+   Facts strip
+   ---------------------------------------------------------- */
+
+.lb-final-facts {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  max-width: 880px;
+
+  margin: clamp(52px, 6vw, 80px) auto 0;
+
+  border-block: 1px solid var(--lb-line);
+}
+
+.lb-final-facts > div {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding-block: 20px;
+  border-inline-start: 1px solid var(--lb-line);
+}
+
+.lb-final-facts > div:first-child {
+  border-inline-start: 0;
+}
+
+.lb-final-facts dt {
+  color: var(--lb-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0;
+}
+
+.lb-final-facts dd {
+  margin: 0;
+  color: var(--lb-text);
+  font-size: 13.5px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ----------------------------------------------------------
+   Tablet
+   ---------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .lb-final {
+    padding-inline: 24px;
+  }
+
+  .lb-final h2 {
+    max-width: 760px;
+
+    font-size: clamp(
+      3rem,
+      9vw,
+      5rem
+    );
+
+    line-height: 0.96;
+  }
+
+  .lb-final-glow {
+    width: min(760px, 110vw);
+  }
+}
+
+
+/* ----------------------------------------------------------
+   Mobile
+   ---------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .lb-final {
+    justify-content: center;
+
+    padding-top: 72px;
+    padding-right: 20px;
+    padding-bottom: 76px;
+    padding-left: 20px;
+  }
+
+  .lb-final-line {
+    width: min(320px, 76vw);
+  }
+
+  .lb-final h2 {
+    max-width: 100%;
+
+    margin-bottom: 32px;
+
+    font-size: clamp(
+      2.75rem,
+      13vw,
+      4rem
+    );
+
+    line-height: 0.96;
+
+    letter-spacing: -0.048em;
+  }
+
+  .lb-final-glow {
+    top: 45%;
+
+    width: 130vw;
+
+    filter: blur(42px);
+  }
+
+  .lb-final-ctas {
+    width: 100%;
+
+    gap: 10px;
+  }
+
+  .lb-final-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    width: min(100%, 360px);
+  }
+
+  .lb-final-facts > div {
+    padding-block: 16px;
+  }
+
+  /* Two columns: the left cell of each row opens the row, not just row 1. */
+  .lb-final-facts > div:nth-child(odd) {
+    border-inline-start: 0;
+  }
+
+  .lb-final-facts > div:nth-child(n + 3) {
+    border-block-start: 1px solid var(--lb-line);
+  }
+}
+
+
+/* ----------------------------------------------------------
+   Very small screens
+   ---------------------------------------------------------- */
+
+@media (max-width: 440px) {
+  .lb-final h2 {
+    font-size: clamp(
+      2.55rem,
+      13.5vw,
+      3.4rem
+    );
+  }
+
+  .lb-final-ctas {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    width: min(100%, 280px);
+  }
+
+  .lb-final-ctas > a {
+    width: 100%;
+  }
+
+  .lb-final-ctas > a > * {
+    width: 100%;
+  }
+}
+
+
+
+/* ---------- footer ---------- */
+
+/*
+ * The brand slab. Blue is the loudest surface on the site, so it gets
+ * depth (a lit top edge, a deepening gradient) rather than flat fill,
+ * and ink-black type for maximum contrast. The dithered footer texture
+ * sits under that gradient, the way the sky photo sits under the
+ * templates scrim: the gradient stays, thinned just enough for the
+ * grain to read without cutting through the link text.
+ */
+.lb-footer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(175deg, rgba(74, 140, 255, 0.72) 0%, rgba(47, 128, 255, 0.64) 34%, rgba(31, 98, 214, 0.84) 100%),
+    url("/background/footer.png") center top / cover no-repeat #2f80ff;
+  color: #050505;
+}
+
+.lb-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 60% at 18% 0%, rgba(255, 255, 255, 0.22), transparent 62%),
+    radial-gradient(60% 50% at 100% 100%, rgba(5, 15, 50, 0.3), transparent 70%);
+}
+
+/* Lit top edge — reads as a physical seam against the near-black page. */
+.lb-footer::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.lb-footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+  gap: clamp(32px, 4vw, 56px);
+  padding-block: clamp(56px, 7vw, 88px) clamp(40px, 5vw, 64px);
+}
+
+.lb-footer-brand {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  justify-items: start;
+}
+
+.lb-footer-brand .lb-nav-word {
+  font-size: 24px;
+  color: #050505;
+}
+
+.lb-footer-brand .lb-nav-word img,
+.lb-footer-brand .lb-nav-word svg {
+  filter: brightness(0);
+}
+
+.lb-footer-brand p {
+  margin: 0;
+  max-width: 28ch;
+  font-size: 13.5px;
+  line-height: 1.7;
+  opacity: 0.74;
+}
+
+/* Ink chip on blue: the dark button variant reads as a hole here.
+   Scoped through .lb-footer so it outranks `.lb-page a { color: inherit }`. */
+.lb-footer .lb-footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: #050505;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: -0.005em;
+  box-shadow: 0 10px 24px -14px rgba(5, 10, 40, 0.9);
+  transition: translate 180ms var(--lb-ease), box-shadow 180ms var(--lb-ease);
+}
+
+.lb-footer .lb-footer-cta:hover {
+  translate: 0 -1px;
+  box-shadow: 0 14px 30px -14px rgba(5, 10, 40, 0.95);
+}
+
+.lb-footer .lb-footer-cta svg {
+  transition: translate 200ms var(--lb-ease);
+}
+
+.lb-footer .lb-footer-cta:hover svg {
+  translate: 2px -2px;
+}
+
+.lb-footer-col {
+  display: grid;
+  gap: 11px;
+  align-content: start;
+}
+
+.lb-footer-col b {
+  margin-block-end: 2px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.6;
+}
+
+.lb-footer-col a,
+.lb-footer-col span {
+  justify-self: start;
+  font-size: 13.5px;
+  opacity: 0.78;
+}
+
+.lb-footer-col a {
+  position: relative;
+  transition: opacity 150ms ease-out;
+}
+
+.lb-footer-col a::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms var(--lb-ease);
+}
+
+.lb-footer-col a:hover {
+  opacity: 1;
+}
+
+.lb-footer-col a:hover::after {
+  transform: scaleX(1);
+}
+
+.lb-footer-word {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(12px, 2vw, 28px);
+  padding-block-start: clamp(16px, 2.5vw, 32px);
+  border-block-start: 1px solid rgba(5, 5, 5, 0.18);
+}
+
+.lb-footer-word a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: clamp(14px, 2.4vw, 36px);
+  font-family: var(--font-display), var(--font-text), sans-serif;
+  font-size: clamp(84px, 19vw, 300px);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: #050505;
+}
+
+.lb-footer-word a span {
+  font-family: var(--font-text), sans-serif;
+  font-size: clamp(34px, 4.5vw, 96px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  transition: translate 240ms var(--lb-ease);
+}
+
+.lb-footer-word a:hover span {
+  translate: 12px 0;
+}
+
+.lb-footer-base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 28px;
+  padding-block: 22px 26px;
+  border-block-start: 1px solid rgba(5, 5, 5, 0.18);
+  font-size: 12.5px;
+  opacity: 0.78;
+}
+
+.lb-footer-base .lb-footer-base-end {
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+/* ---------- reveal ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .lb-reveal {
+    opacity: 0;
+    translate: 0 22px;
+    transition: opacity 700ms var(--lb-ease), translate 700ms var(--lb-ease);
+    transition-delay: var(--lb-reveal-delay, 0ms);
+  }
+
+  .lb-reveal[data-in] {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1040px) {
+  .lb-footer-top {
+    grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 40px);
+  }
+}
+
+@media (max-width: 860px) {
+  .lb-sec-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .lb-sec-head .lb-h {
+    max-width: 22ch;
+  }
+
+  .lb-hero-specs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lb-hero-specs > div {
+    padding-inline: 18px;
+  }
+
+  .lb-hero-specs > div:nth-child(odd) {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+
+  .lb-hero-specs > div:nth-child(n + 3) {
+    border-block-start: 1px solid var(--lb-line);
+  }
+
+  .lb-catalog-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lb-catalog-list li:nth-child(3n + 1) {
+    border-inline-start: 1px solid var(--lb-line);
+  }
+
+  .lb-catalog-list li:nth-child(2n + 1) {
+    border-inline-start: 0;
+  }
+
+  .lb-catalog-list li:nth-child(-n + 3) {
+    border-block-start: 1px solid var(--lb-line);
+  }
+
+  .lb-catalog-list li:nth-child(-n + 2) {
+    border-block-start: 0;
+  }
+
+  .lb-footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lb-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .lb-nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .lb-nav-link {
+    padding: 6px 9px;
+    font-size: 12.5px;
+  }
+
+  .lb-nav-right {
+    gap: 8px;
+  }
+
+  .lb-nav-right .blank-ui-button {
+    --button-height: 26px;
+    --button-padding-x: 10px;
+    --button-font-size: 11.5px;
+  }
+
+  .lb-hero-ctas {
+    width: 100%;
+  }
+
+  .lb-hero-ctas > a,
+  .lb-hero-ctas > a > * {
+    width: 100%;
+  }
+
+  .lb-hero-h1 {
+    font-size: clamp(40px, 11vw, 60px);
+  }
+
+  .lb-hero-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .lb-hero-specs > div {
+    border-inline-start: 0;
+    padding-inline: 0;
+  }
+
+  .lb-hero-specs > div:nth-child(n + 2) {
+    border-block-start: 1px solid var(--lb-line);
+  }
+
+  .lb-catalog-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* :nth-child(n) matches everything at the same specificity as the
+     two-column overrides above, so it actually undoes them. */
+  .lb-catalog-list li:nth-child(n) {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--lb-line);
+  }
+
+  .lb-catalog-list li:first-child {
+    border-block-start: 0;
+  }
+
+  .lb-footer-top {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .lb-footer-base .lb-footer-base-end {
+    margin-inline-start: 0;
+    text-align: start;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-marquee-track,
+  .lb-final-glow,
+  .lb-hero-h1-grad {
+    animation: none !important;
+  }
+
+  .lb-footer-word a span {
+    transition: none !important;
+  }
+}
+
+/* ---------- scrollbar ---------- */
+
+/* Pages scroll without a visible scrollbar: the rail is hidden,
+   wheel/touch/keyboard scrolling still work. */
+html:has(.lb-page) {
+  scrollbar-width: none;
+}
+
+html:has(.lb-page)::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,85 @@
+/*
+ * Sign in. One card on the landing's ground, where the hero mosaic fades
+ * in behind it. GitHub is the only way in, so it is the only action.
+ * Tokens come from landing.css (.lb-page).
+ */
+
+.lb-auth {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.lb-auth-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  width: min(100%, var(--lb-max));
+  height: var(--lb-nav-h);
+  margin-inline: auto;
+  padding-inline: var(--lb-gutter);
+}
+
+/* The bottom padding matches the header, so the card sits on the
+   viewport's optical centre rather than below it. */
+.lb-auth-main {
+  display: grid;
+  place-items: center;
+  padding: 32px var(--lb-gutter) calc(var(--lb-nav-h) + 32px);
+}
+
+.lb-auth-card {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 400px);
+  padding: 32px;
+  border: 1px solid var(--lb-line-strong);
+  border-radius: var(--lb-radius);
+  background: rgba(9, 10, 13, 0.78);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 40px 90px -40px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(18px);
+}
+
+.lb-auth-title {
+  font-size: 30px;
+  line-height: 1.05;
+}
+
+.lb-auth-sub {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.lb-auth-actions {
+  display: grid;
+  gap: 10px;
+  margin-block-start: 10px;
+}
+
+.lb-auth-error {
+  margin: 0;
+  color: #ff8f8f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.lb-auth-note {
+  margin: 2px 0 0;
+  color: var(--lb-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.lb-auth-status {
+  margin: 0;
+  color: var(--lb-secondary);
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .lb-auth-card {
+    padding: 24px 20px;
+  }
+}

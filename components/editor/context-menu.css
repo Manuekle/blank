@@ -1,0 +1,97 @@
+/*
+ * Right-click menu. The same surface as the editor's dropdowns: one
+ * inset, 30px rows, icons in a column.
+ */
+
+.context-menu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 480;
+}
+
+.context-menu {
+  position: fixed;
+  z-index: 481;
+
+  display: grid;
+  gap: 1px;
+
+  min-width: 184px;
+  max-width: 280px;
+  padding: 5px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+
+  background: #161619;
+  box-shadow: var(--shadow-overlay);
+}
+
+.context-menu-item {
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 6px 10px 6px 8px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #d4d4d8;
+
+  font-size: 12.5px;
+  letter-spacing: var(--tracking-12);
+  text-align: start;
+
+  transition: background-color 100ms ease-out, color 100ms ease-out;
+}
+
+.context-menu-item svg {
+  flex: 0 0 auto;
+
+  color: var(--text-tertiary);
+}
+
+.context-menu-item > span {
+  display: grid;
+  gap: 1px;
+}
+
+.context-menu-item small {
+  color: var(--text-tertiary);
+
+  font-size: 11px;
+  letter-spacing: var(--tracking-11);
+}
+
+.context-menu-item:not(:disabled):hover,
+.context-menu-item:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fafafa;
+}
+
+.context-menu-item:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--field-border-focus);
+}
+
+.context-menu-item[data-tone="danger"] {
+  color: var(--danger);
+}
+
+.context-menu-item[data-tone="danger"] svg {
+  color: currentColor;
+}
+
+.context-menu-item[data-tone="danger"]:not(:disabled):hover,
+.context-menu-item[data-tone="danger"]:focus-visible {
+  background: rgba(240, 138, 132, 0.12);
+  color: #ffb4ae;
+}
+
+.context-menu-item:disabled {
+  cursor: default;
+  opacity: 0.55;
+}

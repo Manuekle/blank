@@ -1,0 +1,450 @@
+/* =========================================
+   BLANK BUTTON SYSTEM
+   Tactile dark controls: a raised surface with a lit top edge,
+   a dark lip underneath, and a press that sinks into the page.
+   Type is SF Pro Text with Apple's per-size tracking.
+   ========================================= */
+
+.blank-ui-button {
+  --button-height: 28px;
+  --button-padding-x: 10px;
+  --button-radius: 8px;
+  --button-font-size: 12px;
+  --button-tracking: 0em;
+  --button-icon-size: 13px;
+  --button-gap: 6px;
+
+  --button-bg: linear-gradient(180deg, #212124 0%, #1a1a1d 100%);
+  --button-bg-hover: linear-gradient(180deg, #27272b 0%, #1f1f22 100%);
+  --button-bg-active: #19191c;
+  --button-border: rgba(255, 255, 255, 0.075);
+  --button-border-hover: rgba(255, 255, 255, 0.12);
+  --button-text: #d4d4d8;
+  --button-text-hover: #fafafa;
+  --button-icon: currentColor;
+
+  --button-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.28);
+  --button-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 6px rgba(0, 0, 0, 0.32);
+  --button-shadow-active:
+    inset 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 0 rgba(0, 0, 0, 0);
+  --button-ring: 0 0 0 0 transparent;
+
+  position: relative;
+
+  height: var(--button-height);
+  min-width: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: var(--button-gap);
+
+  padding: 0 var(--button-padding-x);
+
+  appearance: none;
+
+  border: 1px solid var(--button-border);
+  border-radius: var(--button-radius);
+
+  background: var(--button-bg);
+  color: var(--button-text);
+
+  box-shadow: var(--button-shadow), var(--button-ring);
+
+  font-family: var(--font-text), -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-size: var(--button-font-size);
+  font-weight: 500;
+  letter-spacing: var(--button-tracking);
+  line-height: 1;
+  font-feature-settings: "kern";
+  font-synthesis: none;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    background-color 120ms ease-out,
+    border-color 120ms ease-out,
+    color 120ms ease-out,
+    box-shadow 120ms ease-out,
+    opacity 120ms ease-out,
+    translate 100ms ease-out;
+
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   Interaction
+   ========================================= */
+
+.blank-ui-button:hover:not(:disabled) {
+  border-color: var(--button-border-hover);
+  background: var(--button-bg-hover);
+  color: var(--button-text-hover);
+  box-shadow: var(--button-shadow-hover), var(--button-ring);
+}
+
+.blank-ui-button:active:not(:disabled) {
+  translate: 0 0.5px;
+  background: var(--button-bg-active);
+  box-shadow: var(--button-shadow-active), var(--button-ring);
+}
+
+.blank-ui-button:focus-visible {
+  --button-ring: 0 0 0 3px rgba(84, 132, 255, 0.32);
+
+  outline: none;
+  border-color: rgba(120, 160, 255, 0.75);
+}
+
+.blank-ui-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+  box-shadow: none;
+}
+
+/* =========================================
+   Sizes — Apple tracking per point size
+   ========================================= */
+
+.blank-ui-button--xs {
+  --button-height: 24px;
+  --button-padding-x: 8px;
+  --button-radius: 7px;
+  --button-font-size: 11px;
+  --button-tracking: 0.005em;
+  --button-icon-size: 12px;
+  --button-gap: 5px;
+}
+
+.blank-ui-button--sm {
+  --button-height: 28px;
+  --button-padding-x: 10px;
+  --button-radius: 8px;
+  --button-font-size: 12px;
+  --button-tracking: 0em;
+  --button-icon-size: 13px;
+  --button-gap: 6px;
+}
+
+.blank-ui-button--md {
+  --button-height: 32px;
+  --button-padding-x: 12px;
+  --button-radius: 9px;
+  --button-font-size: 13px;
+  --button-tracking: -0.006em;
+  --button-icon-size: 14px;
+  --button-gap: 6px;
+}
+
+.blank-ui-button--lg {
+  --button-height: 36px;
+  --button-padding-x: 14px;
+  --button-radius: 10px;
+  --button-font-size: 14px;
+  --button-tracking: -0.011em;
+  --button-icon-size: 15px;
+  --button-gap: 7px;
+}
+
+.blank-ui-button--icon-xs,
+.blank-ui-button--icon-sm,
+.blank-ui-button--icon-md {
+  --button-padding-x: 0px;
+  --button-gap: 0px;
+
+  width: var(--button-height);
+}
+
+.blank-ui-button--icon-xs {
+  --button-height: 24px;
+  --button-radius: 7px;
+  --button-icon-size: 12px;
+}
+
+.blank-ui-button--icon-sm {
+  --button-height: 28px;
+  --button-radius: 8px;
+  --button-icon-size: 13px;
+}
+
+.blank-ui-button--icon-md {
+  --button-height: 32px;
+  --button-radius: 9px;
+  --button-icon-size: 14px;
+}
+
+.blank-ui-button--full {
+  width: 100%;
+}
+
+/* =========================================
+   Content
+   ========================================= */
+
+.blank-ui-button__label {
+  display: block;
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* line-height 1 with overflow hidden clips descenders (g, y, p). */
+  line-height: 1.25;
+}
+
+/* Raw SVG children (e.g. the composer's send arrow) have no intrinsic size.
+   SF Symbols set width/height attributes and keep their own proportions. */
+.blank-ui-button__label > svg,
+.blank-ui-button__icon > svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.blank-ui-button__label > svg:not([width]),
+.blank-ui-button__icon > svg:not([width]) {
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+}
+
+.blank-ui-button__icon {
+  min-width: var(--button-icon-size);
+  height: var(--button-icon-size);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  color: var(--button-icon);
+}
+
+/* SF Symbols carry their own width/height; keep their proportions. */
+.blank-ui-button__icon > svg[viewBox] {
+  width: auto;
+  height: auto;
+  max-height: var(--button-icon-size);
+}
+
+.blank-ui-button--xs .blank-ui-button__icon:first-child,
+.blank-ui-button--sm .blank-ui-button__icon:first-child,
+.blank-ui-button--md .blank-ui-button__icon:first-child,
+.blank-ui-button--lg .blank-ui-button__icon:first-child {
+  margin-left: -1px;
+}
+
+/* =========================================
+   Neutral
+   ========================================= */
+
+.blank-ui-button--neutral {
+  --button-icon: #a1a1aa;
+}
+
+.blank-ui-button--neutral:hover:not(:disabled) {
+  --button-icon: #e4e4e7;
+}
+
+/* =========================================
+   Primary — lit blue, darker rim, colored bloom
+   ========================================= */
+
+.blank-ui-button--primary {
+  --button-bg: linear-gradient(180deg, #6190ff 0%, #4273f7 100%);
+  --button-bg-hover: linear-gradient(180deg, #6d99ff 0%, #4a7bfa 100%);
+  --button-bg-active: linear-gradient(180deg, #4273f7 0%, #3a69ee 100%);
+  --button-border: #2f5ad6;
+  --button-border-hover: #3563e2;
+  --button-text: #ffffff;
+  --button-text-hover: #ffffff;
+  --button-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(10, 30, 110, 0.18),
+    0 1px 2px rgba(8, 20, 70, 0.55),
+    0 4px 12px -4px rgba(66, 115, 247, 0.55);
+  --button-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(10, 30, 110, 0.18),
+    0 1px 2px rgba(8, 20, 70, 0.55),
+    0 6px 16px -5px rgba(66, 115, 247, 0.7);
+  --button-shadow-active:
+    inset 0 1px 2px rgba(10, 30, 110, 0.35),
+    0 1px 1px rgba(8, 20, 70, 0.4);
+
+  text-shadow: 0 1px 0 rgba(10, 30, 110, 0.2);
+}
+
+.blank-ui-button--primary:disabled {
+  opacity: 0.5;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================
+   Outline — quiet, same geometry
+   ========================================= */
+
+.blank-ui-button--outline {
+  --button-bg: rgba(255, 255, 255, 0.015);
+  --button-bg-hover: rgba(255, 255, 255, 0.045);
+  --button-bg-active: rgba(255, 255, 255, 0.03);
+  --button-border: rgba(255, 255, 255, 0.085);
+  --button-border-hover: rgba(255, 255, 255, 0.13);
+  --button-text: #c4c4ca;
+  --button-icon: #8b8b93;
+  --button-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --button-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --button-shadow-active: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.blank-ui-button--outline:hover:not(:disabled),
+.blank-ui-button--outline[aria-expanded="true"] {
+  --button-icon: #e4e4e7;
+}
+
+.blank-ui-button--outline[aria-expanded="true"] {
+  border-color: var(--button-border-hover);
+  background: var(--button-bg-hover);
+  color: var(--button-text-hover);
+}
+
+/* =========================================
+   Ghost — no surface until touched
+   ========================================= */
+
+.blank-ui-button--ghost {
+  --button-bg: transparent;
+  --button-bg-hover: rgba(255, 255, 255, 0.06);
+  --button-bg-active: rgba(255, 255, 255, 0.04);
+  --button-border: transparent;
+  --button-border-hover: transparent;
+  --button-text: #a1a1aa;
+  --button-text-hover: #f4f4f5;
+  /* A bare `none` inside `box-shadow: var(--button-shadow), var(--button-ring)`
+     makes the whole declaration invalid, which silently dropped the
+     focus ring on every ghost button. A zero-size transparent shadow
+     composes in a list and paints nothing. */
+  --button-shadow: 0 0 #0000;
+  --button-shadow-hover: 0 0 #0000;
+  --button-shadow-active: 0 0 #0000;
+}
+
+.blank-ui-button--ghost[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--button-text-hover);
+}
+
+/* Pressed toggles lift into a small raised chip. */
+.blank-ui-button--ghost[aria-pressed="true"],
+.blank-ui-button--ghost[aria-pressed="true"]:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.07);
+  background: linear-gradient(180deg, #2a2a2e 0%, #232326 100%);
+  color: #fafafa;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    var(--button-ring);
+}
+
+.blank-ui-button--neutral[aria-pressed="true"],
+.blank-ui-button--outline[aria-pressed="true"] {
+  background: #141416;
+  color: #fafafa;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45), var(--button-ring);
+}
+
+/* =========================================
+   Success / Danger — same lit construction as primary
+   ========================================= */
+
+.blank-ui-button--success {
+  --button-bg: linear-gradient(180deg, #3fcf86 0%, #28b26b 100%);
+  --button-bg-hover: linear-gradient(180deg, #4ad690 0%, #2eba73 100%);
+  --button-bg-active: linear-gradient(180deg, #28b26b 0%, #23a162 100%);
+  --button-border: #1d8f55;
+  --button-border-hover: #219a5c;
+  --button-text: #ffffff;
+  --button-text-hover: #ffffff;
+  --button-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 1px 2px rgba(5, 40, 22, 0.55),
+    0 4px 12px -4px rgba(40, 178, 107, 0.45);
+  --button-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 1px 2px rgba(5, 40, 22, 0.55),
+    0 6px 16px -5px rgba(40, 178, 107, 0.6);
+  --button-shadow-active: inset 0 1px 2px rgba(5, 60, 30, 0.35);
+
+  text-shadow: 0 1px 0 rgba(5, 60, 30, 0.2);
+}
+
+.blank-ui-button--danger {
+  --button-bg: linear-gradient(180deg, #f36b62 0%, #e1463f 100%);
+  --button-bg-hover: linear-gradient(180deg, #f5776e 0%, #e64f47 100%);
+  --button-bg-active: linear-gradient(180deg, #e1463f 0%, #d23d36 100%);
+  --button-border: #b8352f;
+  --button-border-hover: #c43a33;
+  --button-text: #ffffff;
+  --button-text-hover: #ffffff;
+  --button-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 1px 2px rgba(60, 10, 8, 0.55),
+    0 4px 12px -4px rgba(225, 70, 63, 0.5);
+  --button-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 1px 2px rgba(60, 10, 8, 0.55),
+    0 6px 16px -5px rgba(225, 70, 63, 0.65);
+  --button-shadow-active: inset 0 1px 2px rgba(90, 15, 12, 0.35);
+
+  text-shadow: 0 1px 0 rgba(90, 15, 12, 0.2);
+}
+
+/* =========================================
+   Loading
+   ========================================= */
+
+.blank-ui-button__spinner {
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+
+  flex: 0 0 auto;
+
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+
+  opacity: 0.8;
+
+  animation: blank-ui-button-spin 620ms linear infinite;
+}
+
+@keyframes blank-ui-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blank-ui-button {
+    transition: none;
+  }
+
+  .blank-ui-button:active:not(:disabled) {
+    translate: none;
+  }
+
+  .blank-ui-button__spinner {
+    animation-duration: 1.2s;
+  }
+}
