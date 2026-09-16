@@ -3,7 +3,7 @@ import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { TemplateCatalog, type CatalogKit } from "@/components/templates/template-catalog";
 import { TEMPLATE_KITS, kitCss } from "@/lib/templates";
-import "../landing/landing.css";
+import "../landing.css";
 import "./templates.css";
 
 export const metadata: Metadata = {

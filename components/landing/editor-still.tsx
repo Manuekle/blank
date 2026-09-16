@@ -20,7 +20,7 @@ import {
 import { getSpec } from "@/lib/components/registry";
 
 /**
- * A still of the editor for the landing hero, served at /landing/still and
+ * A still of the editor for the landing hero, served at /still and
  * framed there by an iframe.
  *
  * The markup mirrors `components/editor` class for class, so the editor's

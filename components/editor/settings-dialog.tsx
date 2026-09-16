@@ -183,7 +183,7 @@ function AccountSection() {
         variant="outline"
         size="sm"
         leftIcon={<SFSymbol name="rectangle.portrait.and.arrow.right" size={12} />}
-        onClick={() => signOut({ redirectUrl: "/" })}
+        onClick={() => signOut({ redirectUrl: "/edit" })}
       >
         Sign out
       </Button>

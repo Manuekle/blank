@@ -8,7 +8,7 @@ import { ComponentBlock } from "@/components/templates/component-block";
 import { CopyButton } from "@/components/templates/copy-button";
 import { kitComponentSpec, TEMPLATE_KITS, componentCss, componentHtml, componentJsx, getKit, kitCss } from "@/lib/templates";
 import { createComponentFiles } from "@/lib/component-model";
-import "../../landing/landing.css";
+import "../../landing.css";
 import "../templates.css";
 
 export const dynamicParams = false;

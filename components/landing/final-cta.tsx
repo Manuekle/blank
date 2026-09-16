@@ -20,7 +20,7 @@ export function FinalCta() {
       </h2>
 
       <div className="lb-final-ctas">
-        <Link href="/">
+        <Link href="/edit">
           <Button
             size="md"
             variant="primary"
@@ -35,7 +35,7 @@ export function FinalCta() {
           </Button>
         </Link>
 
-        <Link href="/landing#catalog">
+        <Link href="/#catalog">
           <Button
             size="md"
             variant="outline"

@@ -3,7 +3,7 @@ import Image from "next/image";
 /**
  * The hero's product shot: the editor on a laptop.
  *
- * The screen is an iframe onto /landing/still (see `editor-still.tsx`),
+ * The screen is an iframe onto /still (see `editor-still.tsx`),
  * built from the editor's own markup and stylesheets. As its own document
  * it keeps a 1280×800 viewport, so the editor's media queries and 100dvh
  * sizing resolve the way they do on a real laptop at any landing width;
@@ -19,7 +19,7 @@ export function HeroEditor() {
 
       <div className="lb-mac">
         <div className="lb-mac-screen">
-          <iframe src="/landing/still" title="Blank editor" tabIndex={-1} inert />
+          <iframe src="/still" title="Blank editor" tabIndex={-1} inert />
         </div>
 
         <Image

@@ -7,7 +7,7 @@ import { LandingNavAuth } from "@/components/landing/landing-nav-auth";
 import { Button } from "@/components/ui/button";
 
 const LINKS = [
-  { id: "catalog", label: "Catalog", href: "/landing#catalog" },
+  { id: "catalog", label: "Catalog", href: "/#catalog" },
   { id: "templates", label: "Templates", href: "/templates" },
 ] as const;
 
@@ -37,7 +37,7 @@ export function LandingNav({ current }: LandingNavProps) {
       <header className="lb-nav" data-scrolled={scrolled || undefined}>
         <nav className="lb-nav-bar" aria-label="Main">
           <div className="lb-nav-inner">
-            <Link href="/landing" className="lb-nav-word" aria-label="Blank home">
+            <Link href="/" className="lb-nav-word" aria-label="Blank home">
               <Logo size={18} />
               blank
             </Link>
@@ -56,7 +56,7 @@ export function LandingNav({ current }: LandingNavProps) {
                 ))}
               </div>
               <LandingNavAuth />
-              <Link href="/">
+              <Link href="/edit">
                 <Button size="sm" variant="primary">
                   Start creating
                 </Button>

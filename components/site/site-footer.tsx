@@ -9,8 +9,8 @@ type FooterLink = { label: string; href: string; meta?: string; dot?: string };
 
 const PRODUCT: FooterLink[] = [
   { label: "Open the editor", href: "/" },
-  { label: "Playground", href: "/landing#playground" },
-  { label: "Share & export", href: "/landing#share" },
+  { label: "Playground", href: "/#playground" },
+  { label: "Share & export", href: "/#share" },
   { label: "All templates", href: "/templates" },
 ];
 
@@ -33,14 +33,14 @@ export function SiteFooter({ note = DEFAULT_NOTE }: { note?: string }) {
     <footer className="site-footer">
       <div className="site-container site-footer-grid">
         <div className="site-footer-brand">
-          <Link href="/landing" className="site-brand" aria-label="Blank home">
+          <Link href="/" className="site-brand" aria-label="Blank home">
             <Logo size={22} className="site-brand-mark" />
             <span className="site-brand-word" aria-hidden="true">
               blank
             </span>
           </Link>
           <p>A workspace for components you design, code and ship yourself. Start blank. Make it yours.</p>
-          <Link href="/" className="site-btn site-btn--sm">
+          <Link href="/edit" className="site-btn site-btn--sm">
             Open the editor <SFSymbol name="arrow.up.right" size={11} />
           </Link>
         </div>

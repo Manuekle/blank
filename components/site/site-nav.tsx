@@ -6,9 +6,9 @@ import { Logo } from "@/components/icons/logo";
 import { SFSymbol } from "@/components/icons/sf-symbol";
 
 const LINKS = [
-  { id: "playground", label: "Playground", href: "/landing#playground" },
+  { id: "playground", label: "Playground", href: "/#playground" },
   { id: "templates", label: "Templates", href: "/templates" },
-  { id: "share", label: "Share", href: "/landing#share" },
+  { id: "share", label: "Share", href: "/#share" },
 ] as const;
 
 type SiteNavProps = {
@@ -58,7 +58,7 @@ export function SiteNav({ current }: SiteNavProps) {
       <div ref={sentinelRef} id="top" className="site-nav-sentinel" aria-hidden="true" />
       <header className="site-nav" data-scrolled={scrolled || undefined}>
         <nav className="site-nav-bar" aria-label="Main">
-          <Link href="/landing" className="site-brand" aria-label="Blank home">
+          <Link href="/" className="site-brand" aria-label="Blank home">
             <Logo size={20} className="site-brand-mark" />
             <span className="site-brand-word" aria-hidden="true">
               blank
@@ -83,7 +83,7 @@ export function SiteNav({ current }: SiteNavProps) {
           </div>
 
           <div className="site-nav-actions">
-            <Link href="/" className="site-btn site-btn--primary site-btn--sm">
+            <Link href="/edit" className="site-btn site-btn--primary site-btn--sm">
               Open editor <SFSymbol name="arrow.up.right" size={11} />
             </Link>
           </div>

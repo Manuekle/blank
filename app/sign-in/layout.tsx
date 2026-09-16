@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Logo } from "@/components/icons/logo";
-import "../landing/landing.css";
+import "../landing.css";
 import "./sign-in.css";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export default function SignInLayout({ children }: { children: React.ReactNode }
     <ClerkProvider signInUrl="/sign-in">
       <div className="lb-page lb-auth">
         <header className="lb-auth-top">
-          <Link href="/landing" className="lb-nav-word" aria-label="Blank home">
+          <Link href="/" className="lb-nav-word" aria-label="Blank home">
             <Logo size={18} />
             blank
           </Link>

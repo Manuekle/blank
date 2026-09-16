@@ -4,7 +4,7 @@ import { GitHubSignIn } from "@/components/auth/github-sign-in";
 
 export default async function SignInPage() {
   const { userId } = await auth();
-  if (userId) redirect("/");
+  if (userId) redirect("/edit");
 
   return (
     <main id="main" className="lb-auth-main">

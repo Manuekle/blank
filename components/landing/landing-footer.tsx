@@ -8,7 +8,7 @@ const COLUMNS = [
     title: "Product",
     links: [
       { label: "Open the editor", href: "/" },
-      { label: "Component catalog", href: "/landing#catalog" },
+      { label: "Component catalog", href: "/#catalog" },
       { label: "Templates", href: "/templates" },
     ],
   },
@@ -34,12 +34,12 @@ export function LandingFooter({ note }: { note?: string }) {
       <div className="lb-container">
         <div className="lb-footer-top">
           <div className="lb-footer-brand">
-            <Link href="/landing" className="lb-nav-word" aria-label="Blank home">
+            <Link href="/" className="lb-nav-word" aria-label="Blank home">
               <Logo size={20} />
               blank
             </Link>
             <p>Design, code, remix and ship components. Start blank. Make it yours.</p>
-            <Link href="/" className="lb-footer-cta">
+            <Link href="/edit" className="lb-footer-cta">
               Start creating
               <SFSymbol name="arrow.up.right" size={12} aria-hidden="true" />
             </Link>
@@ -58,7 +58,7 @@ export function LandingFooter({ note }: { note?: string }) {
         </div>
 
         <div className="lb-footer-word">
-          <Link href="/" aria-label="Blank — open the editor">
+          <Link href="/edit" aria-label="Blank — open the editor">
             blank<span aria-hidden="true">→</span>
           </Link>
         </div>
